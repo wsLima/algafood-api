@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: algafood
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_DB: algafood
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+

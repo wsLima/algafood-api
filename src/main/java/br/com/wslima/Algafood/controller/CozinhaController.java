@@ -3,8 +3,10 @@ package br.com.wslima.Algafood.controller;
 import br.com.wslima.Algafood.controller.model.CozinhasXmlWrapper;
 import br.com.wslima.Algafood.domain.model.Cozinha;
 import br.com.wslima.Algafood.domain.repository.CozinhaRepository;
+import br.com.wslima.Algafood.domain.service.CozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,9 @@ public class CozinhaController {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
+
+    @Autowired
+    private CozinhaService service;
 
     @GetMapping
     public List<Cozinha> listar() {
@@ -43,7 +48,8 @@ public class CozinhaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-        return cozinhaRepository.salvar(cozinha);
+
+        return service.salvar(cozinha);
     }
 
     @PutMapping("/{cozinhaId}")
@@ -59,6 +65,22 @@ public class CozinhaController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Cozinha> remover(@PathVariable Long id){
+        try {
+            Cozinha cozinha = cozinhaRepository.buscar(id);
+
+            if(cozinha != null) {
+                cozinhaRepository.remover(cozinha);
+                return ResponseEntity.noContent().build();
+            }
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
     }
 
 }

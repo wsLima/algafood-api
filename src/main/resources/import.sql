@@ -1,4 +1,4 @@
-insert into cozinha (id, nome) values (1, 'Tailandesa');
+insert into cozinha (id, nome) values (1, 'Tailandresa');
 insert into cozinha (id, nome) values (2, 'Indiana');
 
 insert into restaurante (id, nome, taxa_frete, cozinha_id) values (1, 'Thai Gourmet', 10, 1);
